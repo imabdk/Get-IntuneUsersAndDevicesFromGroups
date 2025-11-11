@@ -31,4 +31,4 @@ Required permissions:
 ## Authors
 
 - Martin Bengtsson ([https://imab.dk](https://imab.dk))
-- Christian Frohn ([https://christianfrohn.dk/](https://christianfrohn.dk/))
+- Christian Frohn ([https://christianfrohn.dk/](https://christianfrohn.dk))

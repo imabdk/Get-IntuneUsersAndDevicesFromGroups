@@ -34,3 +34,6 @@ $RECYCLE.BIN/
 *.credentials
 *.secrets
 appsettings.local.json
+
+# Social media and personal files
+social-media-posts.md

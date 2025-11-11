@@ -21,7 +21,7 @@
 .NOTES
     Authors: 
         Martin Bengtsson (https://imab.dk)
-        Christian Frohn (https://www.christianfrohn.dk)
+        Christian Frohn (https://christianfrohn.dk)
     Date: November 2025
 #>
 

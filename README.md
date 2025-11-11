@@ -18,8 +18,8 @@ Supports nested groups and works with both users and devices. Requires Microsoft
 
 ## Authentication
 
-**Interactive Mode**: Uses delegated permissions for manual execution
-**Azure Automation**: Automatically detects and uses managed identity
+- **Interactive Mode**: Uses delegated permissions for manual execution
+- **Azure Automation**: Automatically detects and uses managed identity
 
 Required permissions:
 - `DeviceManagementManagedDevices.Read.All`

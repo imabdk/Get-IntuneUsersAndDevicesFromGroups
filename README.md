@@ -15,3 +15,8 @@ Find Intune devices from user groups, filter by OS version, and populate target 
 ```
 
 Supports nested groups and works with both users and devices. Requires Microsoft Graph modules.
+
+## Authors
+
+- Martin Bengtsson ([https://imab.dk](https://imab.dk))
+- Christian Frohn ([https://christianfrohn.dk/](https://christianfrohn.dk/))

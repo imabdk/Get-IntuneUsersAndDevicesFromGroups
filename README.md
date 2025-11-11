@@ -17,7 +17,17 @@ Find Intune devices from user groups, filter by OS version, and populate target 
 
 ```
 
-Supports nested groups and works with both users and devices. Requires Microsoft Graph modules.
+Supports nested groups and works with both users and devices.
+
+## Prerequisites
+
+Required Microsoft Graph modules:
+- `Microsoft.Graph.Authentication`
+- `Microsoft.Graph.DeviceManagement`
+- `Microsoft.Graph.Groups`
+- `Microsoft.Graph.Users`
+
+Install with: `Install-Module Microsoft.Graph.Authentication, Microsoft.Graph.DeviceManagement, Microsoft.Graph.Groups, Microsoft.Graph.Users`
 
 ## Authentication
 

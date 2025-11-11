@@ -1,3 +1,30 @@
+<#
+.SYNOPSIS
+    Get Intune devices from Entra ID groups and populate target groups by OS version
+
+.DESCRIPTION
+    Finds devices from user/device groups, filters by iOS/Windows versions, and adds 
+    users or devices to target groups. Supports nested groups and Azure Automation.
+
+.EXAMPLE
+    # Find users with iOS devices < 18.0 and add to notification group
+    .\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @("Sales", "Marketing") -IOSVersion "18.0" -Operator "lt" -TargetGroupName "iOS-Update-Notifications" -AddToGroup Users
+
+.EXAMPLE
+    # Get all Windows devices from Finance team and add devices to group (no version filter)
+    .\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @("Finance Team") -TargetGroupName "Finance-Windows-Devices" -AddToGroup Devices
+
+.EXAMPLE
+    # Discovery mode - report only, no changes
+    .\Get-IntuneUsersAndDevicesFromGroups.ps1 -WhatIf
+
+.NOTES
+    Authors: 
+        Martin Bengtsson (https://imab.dk)
+        Christian Frohn (https://www.christianfrohn.dk)
+    Date: November 2025
+#>
+
 [CmdletBinding()]
 param(
     [string[]]$SourceGroupName = @('Team - IT Helpdesk', 'Team - Legal Tech & AI', 'Team - Security and Identity management'),

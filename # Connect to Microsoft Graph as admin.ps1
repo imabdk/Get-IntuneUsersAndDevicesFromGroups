@@ -1,3 +1,30 @@
+<#
+.SYNOPSIS
+    Assign Microsoft Graph permissions to Azure Automation managed identity
+
+.DESCRIPTION
+    This script assigns the necessary Microsoft Graph application permissions to an 
+    Azure Automation managed identity for the Get-IntuneUsersAndDevicesFromGroups script.
+    
+    Required permissions:
+    - DeviceManagementManagedDevices.Read.All
+    - Group.Read.All / Group.ReadWrite.All
+    - User.Read.All
+    - GroupMember.Read.All
+    - Device.Read.All
+
+.PARAMETER managedIdentityName
+    Name of the Azure Automation Account (for system-assigned) or managed identity name (for user-assigned)
+
+.NOTES
+    Authors: 
+        Martin Bengtsson (https://imab.dk)
+        Christian Frohn (https://christianfrohn.dk)
+    Date: November 2025
+    Requires Global Administrator or Application Administrator role
+    Run this once per managed identity setup
+#>
+
 # Connect to Microsoft Graph as admin
 Connect-MgGraph -Scopes "Application.Read.All", "AppRoleAssignment.ReadWrite.All"
 

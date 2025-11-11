@@ -4,7 +4,7 @@ Connect-MgGraph -Scopes "Application.Read.All", "AppRoleAssignment.ReadWrite.All
 # Get the managed identity service principal
 # For system-assigned: use your Automation Account name
 # For user-assigned: use your managed identity name
-$managedIdentityName = "Intune-Users-And-Devices"  # or managed identity name
+$managedIdentityName = ""  # or managed identity name
 $managedIdentity = Get-MgServicePrincipal -Filter "displayName eq '$managedIdentityName'"
 
 # Get Microsoft Graph service principal
@@ -35,7 +35,7 @@ foreach ($permissionName in $requiredPermissions) {
                 -AppRoleId $appRole.Id `
                 -ErrorAction Stop
             
-            Write-Host "✓ Assigned: $permissionName" -ForegroundColor Green
+            Write-Host "[OK] Assigned: $permissionName" -ForegroundColor Green
         }
         catch {
             Write-Warning "Failed to assign $permissionName : $_"

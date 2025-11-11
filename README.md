@@ -1,21 +1,38 @@
-# Get-IntuneUsersAndDevicesFromGroups# Get-IntuneUsersAndDevicesFromGroups# Multi-Platform Device Update Checker
+# Get-IntuneUsersAndDevicesFromGroups# Get-IntuneUsersAndDevicesFromGroups# Get-IntuneUsersAndDevicesFromGroups# Multi-Platform Device Update Checker
 
 
 
-Get Intune devices from Entra ID groups and filter by OS version. Optionally populate a target group for assignments.
+Find Intune devices by OS version from Entra ID groups and add users to target groups.
 
 
 
-## Quick StartPowerShell script to retrieve Intune devices and their users from Entra ID groups, with flexible OS version filtering for managing device update campaigns.This PowerShell script automatically finds iOS, iPadOS, and Windows devices in Microsoft Intune that are not up to date and adds their primary users to an Entra ID group for toast notification deployment.
+## UsageGet Intune devices from Entra ID groups and filter by OS version. Optionally populate a target group for assignments.
 
 
 
 ```powershell
 
-# Install modules
+# Show devices with iOS < 26.0.1 from default groups
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1## Quick StartPowerShell script to retrieve Intune devices and their users from Entra ID groups, with flexible OS version filtering for managing device update campaigns.This PowerShell script automatically finds iOS, iPadOS, and Windows devices in Microsoft Intune that are not up to date and adds their primary users to an Entra ID group for toast notification deployment.
+
+
+
+# Add users with outdated devices to a group
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -TargetGroupName "iOS-Updates" -AddToGroup Users
+
+```powershell
+
+# Query all devices org-wide
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @()# Install modules
+
+```
 
 Install-Module Microsoft.Graph.Authentication, Microsoft.Graph.DeviceManagement, Microsoft.Graph.Groups, Microsoft.Graph.Users## Features## Prerequisites
 
+Requires Microsoft Graph PowerShell modules and appropriate permissions.
 
 
 # Discovery mode - show devices with iOS < 26.0.1

@@ -1,32 +1,61 @@
-# Get-IntuneUsersAndDevicesFromGroups# Multi-Platform Device Update Checker
+# Get-IntuneUsersAndDevicesFromGroups# Get-IntuneUsersAndDevicesFromGroups# Multi-Platform Device Update Checker
 
 
 
-PowerShell script to retrieve Intune devices and their users from Entra ID groups, with flexible OS version filtering for managing device update campaigns.This PowerShell script automatically finds iOS, iPadOS, and Windows devices in Microsoft Intune that are not up to date and adds their primary users to an Entra ID group for toast notification deployment.
+Get Intune devices from Entra ID groups and filter by OS version. Optionally populate a target group for assignments.
 
 
 
-## Features## Prerequisites
+## Quick StartPowerShell script to retrieve Intune devices and their users from Entra ID groups, with flexible OS version filtering for managing device update campaigns.This PowerShell script automatically finds iOS, iPadOS, and Windows devices in Microsoft Intune that are not up to date and adds their primary users to an Entra ID group for toast notification deployment.
 
 
+
+```powershell
+
+# Install modules
+
+Install-Module Microsoft.Graph.Authentication, Microsoft.Graph.DeviceManagement, Microsoft.Graph.Groups, Microsoft.Graph.Users## Features## Prerequisites
+
+
+
+# Discovery mode - show devices with iOS < 26.0.1
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1
 
 - **Flexible Source Selection**: Query from specific Entra ID groups or organization-wide### Required PowerShell Modules
 
-- **Nested Group Support**: Automatically expands nested groups recursively```powershell
+# Add users to target group
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -TargetGroupName "iOS-Update-Required" -AddToGroup Users- **Nested Group Support**: Automatically expands nested groups recursively```powershell
+
+```
 
 - **OS Version Filtering**: Filter devices by iOS/Windows versions with comparison operators (eq, ne, lt, le, gt, ge)Install-Module Microsoft.Graph.DeviceManagement -Scope CurrentUser
 
+## Key Parameters
+
 - **Dual Mode Operation**: Discovery mode for reporting, or populate a target group for assignmentsInstall-Module Microsoft.Graph.Groups -Scope CurrentUser  
 
-- **Smart Member Handling**: Add users and/or devices to target groupsInstall-Module Microsoft.Graph.Users -Scope CurrentUser
+- `SourceGroupName` - Source groups (default: IT teams) or empty array for org-wide
 
-- **Azure Automation Ready**: Supports managed identity for unattended execution```
+- `IOSVersion` / `WindowsVersion` - Version to compare (default: "26.0.1")- **Smart Member Handling**: Add users and/or devices to target groupsInstall-Module Microsoft.Graph.Users -Scope CurrentUser
 
-- **Performance Optimized**: Batches API calls and caches results
+- `Operator` - eq, ne, lt, le, gt, ge (default: "lt")
 
-### Microsoft Graph API Permissions
+- `TargetGroupName` - Group to populate- **Azure Automation Ready**: Supports managed identity for unattended execution```
 
-## Quick StartYour app registration needs the following permissions:
+- `AddToGroup` - Users, Devices, or Both
+
+- `WhatIf` - Preview without changes- **Performance Optimized**: Batches API calls and caches results
+
+
+
+## Permissions### Microsoft Graph API Permissions
+
+
+
+`DeviceManagementManagedDevices.Read.All`, `Group.ReadWrite.All`, `GroupMember.Read.All`, `User.Read.All`, `Device.Read.All`## Quick StartYour app registration needs the following permissions:
+
 
 - `DeviceManagementManagedDevices.Read.All`
 

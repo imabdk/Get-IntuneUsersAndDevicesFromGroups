@@ -16,6 +16,18 @@ Find Intune devices from user groups, filter by OS version, and populate target 
 
 Supports nested groups and works with both users and devices. Requires Microsoft Graph modules.
 
+## Authentication
+
+**Interactive Mode**: Uses delegated permissions for manual execution
+**Azure Automation**: Automatically detects and uses managed identity
+
+Required permissions:
+- `DeviceManagementManagedDevices.Read.All`
+- `Group.Read.All` / `Group.ReadWrite.All`
+- `GroupMember.Read.All`
+- `User.Read.All`
+- `Device.Read.All`
+
 ## Authors
 
 - Martin Bengtsson ([https://imab.dk](https://imab.dk))

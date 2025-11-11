@@ -1,70 +1,137 @@
-# Multi-Platform Device Update Checker
+# Get-IntuneUsersAndDevicesFromGroups# Multi-Platform Device Update Checker
 
-This PowerShell script automatically finds iOS, iPadOS, and Windows devices in Microsoft Intune that are not up to date and adds their primary users to an Entra ID group for toast notification deployment.
 
-## Prerequisites
 
-### Required PowerShell Modules
-```powershell
-Install-Module Microsoft.Graph.DeviceManagement -Scope CurrentUser
-Install-Module Microsoft.Graph.Groups -Scope CurrentUser  
-Install-Module Microsoft.Graph.Users -Scope CurrentUser
-```
+PowerShell script to retrieve Intune devices and their users from Entra ID groups, with flexible OS version filtering for managing device update campaigns.This PowerShell script automatically finds iOS, iPadOS, and Windows devices in Microsoft Intune that are not up to date and adds their primary users to an Entra ID group for toast notification deployment.
+
+
+
+## Features## Prerequisites
+
+
+
+- **Flexible Source Selection**: Query from specific Entra ID groups or organization-wide### Required PowerShell Modules
+
+- **Nested Group Support**: Automatically expands nested groups recursively```powershell
+
+- **OS Version Filtering**: Filter devices by iOS/Windows versions with comparison operators (eq, ne, lt, le, gt, ge)Install-Module Microsoft.Graph.DeviceManagement -Scope CurrentUser
+
+- **Dual Mode Operation**: Discovery mode for reporting, or populate a target group for assignmentsInstall-Module Microsoft.Graph.Groups -Scope CurrentUser  
+
+- **Smart Member Handling**: Add users and/or devices to target groupsInstall-Module Microsoft.Graph.Users -Scope CurrentUser
+
+- **Azure Automation Ready**: Supports managed identity for unattended execution```
+
+- **Performance Optimized**: Batches API calls and caches results
 
 ### Microsoft Graph API Permissions
-Your app registration needs the following permissions:
-- `DeviceManagementManagedDevices.Read.All`
-- `GroupMember.ReadWrite.All`
-- `User.Read.All`
-- `Group.ReadWrite.All`
 
-## Usage
+## Quick StartYour app registration needs the following permissions:
+
+- `DeviceManagementManagedDevices.Read.All`
+
+```powershell- `GroupMember.ReadWrite.All`
+
+# Install required modules- `User.Read.All`
+
+Install-Module Microsoft.Graph.Authentication, Microsoft.Graph.DeviceManagement, Microsoft.Graph.Groups, Microsoft.Graph.Users- `Group.ReadWrite.All`
+
+
+
+# Discovery mode - find iOS devices with version < 26.0.1 from specific groups## Usage
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1
 
 ### Basic Usage
-```powershell
-# Run with default settings (all platforms)
+
+# Add users to a target group```powershell
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -TargetGroupName "iOS-Update-Required" -AddToGroup Users# Run with default settings (all platforms)
+
 .\Find-OutdatedIOSDevices.ps1
 
-# Query specific platforms only
-.\Find-OutdatedIOSDevices.ps1 -Platforms @("iOS", "Windows")
+# Organization-wide query with custom operator
 
-# Specify custom minimum versions
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @() -IOSVersion "18.0" -Operator "lt" -TargetGroupName "iOS-Outdated" -AddToGroup Users# Query specific platforms only
+
+```.\Find-OutdatedIOSDevices.ps1 -Platforms @("iOS", "Windows")
+
+
+
+## Parameters# Specify custom minimum versions
+
 .\Find-OutdatedIOSDevices.ps1 -MinimumVersions @{"iOS"="18.1"; "Windows"="10.0.22000"}
 
-# Use existing group by ID
-.\Find-OutdatedIOSDevices.ps1 -TargetGroupId "12345678-1234-1234-1234-123456789012"
+| Parameter | Type | Default | Description |
 
-# Test run without making changes
-.\Find-OutdatedIOSDevices.ps1 -WhatIf
+|-----------|------|---------|-------------|# Use existing group by ID
 
-# Test with limited users
-.\Find-OutdatedIOSDevices.ps1 -TestLimit 5 -WhatIf
-```
+| `SourceGroupName` | String[] | `@('Team - IT Helpdesk', 'Team - Legal Tech & AI', 'Team - Security and Identity management')` | Source Entra ID groups (empty array for org-wide query) |.\Find-OutdatedIOSDevices.ps1 -TargetGroupId "12345678-1234-1234-1234-123456789012"
 
-### Parameters
+| `IOSVersion` | String | `"26.0.1"` | iOS version to compare against |
 
-| Parameter | Type | Description | Default |
-|-----------|------|-------------|---------|
-| `MinimumVersions` | Hashtable | Minimum versions for each platform | `@{"iOS"="18.0"; "iPadOS"="18.0"; "Windows"="10.0.22621"}` |
-| `Platforms` | String[] | Platforms to query (iOS, iPadOS, Windows) | `@("iOS", "iPadOS", "Windows")` |
-| `TargetGroupId` | String | ID of Entra ID group to add users to | Required |
+| `WindowsVersion` | String | `null` | Windows version to compare against |# Test run without making changes
+
+| `Operator` | String | `"lt"` | Comparison operator: eq, ne, lt, le, gt, ge |.\Find-OutdatedIOSDevices.ps1 -WhatIf
+
+| `TargetGroupName` | String | `"Intune-IT-Users-Needs-iOS-Update"` | Target group to populate |
+
+| `AddToGroup` | String | `"Users"` | What to add: Users, Devices, or Both |# Test with limited users
+
+| `ClearTargetGroup` | Switch | `$true` | Clear target group before adding members |.\Find-OutdatedIOSDevices.ps1 -TestLimit 5 -WhatIf
+
+| `WhatIf` | Switch | `$false` | Preview changes without executing |```
+
+
+
+## Permissions Required### Parameters
+
+
+
+- `DeviceManagementManagedDevices.Read.All`| Parameter | Type | Description | Default |
+
+- `Group.Read.All` / `Group.ReadWrite.All`|-----------|------|-------------|---------|
+
+- `GroupMember.Read.All`| `MinimumVersions` | Hashtable | Minimum versions for each platform | `@{"iOS"="18.0"; "iPadOS"="18.0"; "Windows"="10.0.22621"}` |
+
+- `User.Read.All`| `Platforms` | String[] | Platforms to query (iOS, iPadOS, Windows) | `@("iOS", "iPadOS", "Windows")` |
+
+- `Device.Read.All`| `TargetGroupId` | String | ID of Entra ID group to add users to | Required |
+
 | `TestLimit` | Int | Limit number of users for testing (0 = no limit) | 10 |
-| `WhatIf` | Switch | Preview changes without executing | True (enabled by default) |
 
-## What the Script Does
+## Use Cases| `WhatIf` | Switch | Preview changes without executing | True (enabled by default) |
 
-1. **Connects to Microsoft Graph** with required permissions
-2. **Queries Intune** for devices across specified platforms (iOS, iPadOS, Windows)
+
+
+**Device Update Campaigns**: Find users with outdated OS versions and add them to a notification group## What the Script Does
+
+```powershell
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -IOSVersion "18.1" -Operator "lt" -TargetGroupName "iOS-Updates" -AddToGroup Users1. **Connects to Microsoft Graph** with required permissions
+
+```2. **Queries Intune** for devices across specified platforms (iOS, iPadOS, Windows)
+
 3. **Filters devices** with OS versions below the minimum requirements
-4. **Extracts primary users** from outdated devices
-5. **Adds users to target group** (avoiding duplicates)
-6. **Provides detailed summary** of actions taken
+
+**Compliance Reporting**: Discover devices below minimum version without making changes4. **Extracts primary users** from outdated devices
+
+```powershell5. **Adds users to target group** (avoiding duplicates)
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @() -WindowsVersion "10.0.22000" -Operator "lt" -TargetGroupName ""6. **Provides detailed summary** of actions taken
+
+```
 
 ## Output Example
 
-```
-Starting Multi-Platform Device Update Check...
-Connecting to Microsoft Graph...
+**Department Targeting**: Process specific departments with nested group expansion
+
+```powershell```
+
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @("Sales", "Marketing") -AddToGroup BothStarting Multi-Platform Device Update Check...
+
+```Connecting to Microsoft Graph...
+
 Getting target group...
 Using group: Device-Update-Notifications (ID: 12345678-1234-1234-1234-123456789012)
 Clearing existing group members...

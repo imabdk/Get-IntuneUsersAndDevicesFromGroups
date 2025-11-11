@@ -6,11 +6,14 @@ Find Intune devices from user groups, filter by OS version, and populate target 
 
 ```powershell
 
-# Find iOS devices from user groups and add their users to notification group
-.\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @("Sales Team", "Marketing") -IOSVersion "18.0" -Operator "lt" -TargetGroupName "iOS-Update-Notifications" -AddToGroup Users
+# Find iOS devices from user groups and add their users to toast notification group
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @("Sales Team", "Marketing") -IOSVersion "18.0" -Operator "lt" -TargetGroupName "Toast-Notification-Group" -AddToGroup Users
 
-# Find Windows devices from groups and add devices to management group
+# Find Windows devices from user groups and add devices to management group
 .\Get-IntuneUsersAndDevicesFromGroups.ps1 -SourceGroupName @("IT Helpdesk", "Legal Team") -WindowsVersion "10.0.22000" -Operator "lt" -TargetGroupName "Windows-Devices-Outdated" -AddToGroup Devices
+
+# Get all iOS devices with version less than 26.0.0 and add their users to the toast notification group
+.\Get-IntuneUsersAndDevicesFromGroups.ps1 -IOSVersion "26.0.0" -Operator "lt" -TargetGroupName "Toast-Notification-Group" -AddToGroup Users
 
 ```
 
@@ -27,6 +30,10 @@ Required permissions:
 - `GroupMember.Read.All`
 - `User.Read.All`
 - `Device.Read.All`
+
+## ClearTargetGroup Parameter
+
+The `-ClearTargetGroup` parameter (enabled by default) removes existing members from the target group before adding new ones. This is essential in automated scenarios to prevent users from receiving notifications for devices they no longer own or that have been updated. Without clearing the group, users would accumulate over time and continue receiving irrelevant notifications.
 
 ## Authors
 

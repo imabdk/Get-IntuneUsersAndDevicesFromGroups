@@ -43,7 +43,7 @@ Required permissions:
 
 ## Parameters
 
-**ClearTargetGroup**: Enabled by default, removes existing members from the target group before adding new ones. Essential in automated scenarios to prevent users from receiving notifications for devices they no longer own or that have been updated.
+**ClearTargetGroup**: Enabled by default, removes existing members from the target group before adding new ones. Essential in automated scenarios to prevent unintentional incremental growth where users and devices accumulate over time without being removed when no longer relevant.
 
 **WhatIf**: Preview mode that shows what changes would be made without executing them. Always start by running the script with `-WhatIf` to verify the expected results before making actual changes to your groups.
 
